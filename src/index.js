@@ -9,6 +9,10 @@ class Counter extends React.Component {
       }
   }
 
+  componentWillMount() {
+    console.log('11111');
+  }
+
   onClick() {
       this.setState( { num: this.state.num + 1 } );
   }

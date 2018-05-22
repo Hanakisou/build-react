@@ -12,14 +12,14 @@ function _render(vnode){
     const textNode = document.createTextNode(vnode);
     return textNode;
   }
-  if(typeof vnode === 'function'){
+  if(typeof vnode.tag === 'function'){
     const component = createComponent(vnode.tag, vnode.attrs);
     setComponentProps(component, vnode.attrs);
     return component.base;
   }
   const dom = document.createElement( vnode.tag );
   if(vnode.attrs){
-    object.keys(vnode.attrs).forEach(key => {
+    Object.keys(vnode.attrs).forEach(key => {
       const value = vnode.attrs[key];
       setAttribute(dom, key, value)
     })
