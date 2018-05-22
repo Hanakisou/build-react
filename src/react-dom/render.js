@@ -67,6 +67,6 @@ export function renderComponent(component){
   if(component.base && component.base.parentNode){
     component.base.parentNode.replaceChild( base, component.base );
   }
-  component.base = base;
+  component.base = base;   // component的base在这里赋值
   base._component = component;
 }

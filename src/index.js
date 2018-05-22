@@ -13,6 +13,10 @@ class Counter extends React.Component {
     console.log('11111');
   }
 
+  componentWillUpdate(){
+    console.log('update');
+  }
+
   onClick() {
       this.setState( { num: this.state.num + 1 } );
   }
@@ -27,7 +31,20 @@ class Counter extends React.Component {
   }
 }
 
+
+// const Counter = ({name}) => {
+//   const handleClick = (e) => {
+//     name = 'hello'
+//   }
+//   return (
+//     <div>
+//       <span>{name}</span>
+//       <button onClick={handleClick}>click</button>
+//     </div>
+//   )
+// }
+
 ReactDOM.render(
-  <Counter />,
+  <Counter name="hi"/>,
   document.getElementById( 'root' )
 )
