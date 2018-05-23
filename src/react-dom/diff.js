@@ -34,7 +34,7 @@ function diffNode( dom, vnode ) {
     }
     return out;
   }
-  if(typeof vnode === 'function'){
+  if(typeof vnode.tag === 'function'){
     return diffComponent( dom, vnode );
   }
   if(!dom || !isSameNodeType(dom, vnode)){
@@ -58,7 +58,7 @@ function isSameNodeType(dom, vnode){
     return dom.nodeType === 3;
   }
   if(typeof vnode.tag === 'string'){
-    return vnode.tag.toLowerCaes() === dom.nodeName.toLowerCaes();
+    return vnode.tag.toLowerCase() === dom.nodeName.toLowerCase();
   }
   return dom && dom._component && dom._component.constructor === vnode.tag;
 }
