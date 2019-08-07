@@ -1,7 +1,20 @@
-const render = (vnode, container) => {
+import Component from '../React/Component';
+import {
+  setAttribute,
+  toStr,
+} from './util';
+
+const _render = (vnode) => {
+  if(toStr(vnode) === '[object Null]' || toStr(vnode) === '[object Undefined]' || toStr(vnode) === '[object Boolean]') vnode = '';
+  if(toStr(vnode) === '[object Number]') vnode = String(vnode);
   if(toStr(vnode) === '[object String]') {
     const textNode = document.createTextNode(vnode);
-    container.appendChild(textNode);
+    return textNode;
+  }
+  if(toStr(vnode.tag) === '[object Function]') {
+    const component = createComponent(vnode.tag, vnode.attrs);
+    renderComponent(component)
+    return component.base;
   }
   const dom = vnode.tag && document.createElement(vnode.tag);
   if (vnode.attrs) {
@@ -11,34 +24,34 @@ const render = (vnode, container) => {
     })
   }
   vnode.children && vnode.children.forEach(child => render(child, dom));
-  return dom && container.appendChild(dom);
+  return dom;
 }
 
-const setAttribute = (dom, key, value) => {
-  if(key === 'className') key = 'class';
-  if(/on\w+/.test(key)) {
-    key = key.toLowerCase();
-    dom[key] = value;
-  } else if (key === 'style') {
-    if (!value || toStr(value) === '[object String]') {
-      dom.style.cssText = value || '';
-    } else if (toStr(value) === '[object Object]') {
-      for (let name in value) {
-        dom.style[name] = toStr(value[name]) === '[object Number]' ? value[name] + 'px' : value[name];
-      }
-    }
+const createComponent = (component, props) => {
+  let inst;
+  if(component.prototype && component.prototype.render) {
+    inst = new component(props);
   } else {
-    if (key in dom) {
-      dom[key] = value|| ''
-    }
-    if (value) {
-      dom.setAttribute(key, value);
-    } else {
-      dom.removeAttribute(key);
-    }
+    inst = new Component(props);
+    inst.constructor = component;
+    inst.render = function() {
+      return this.constructor(props);
+    };
   }
+  return inst;
 }
 
-const toStr = Function.prototype.call.bind(Object.prototype.toString);
+export const renderComponent = (component) => {
+  let base;
+  const renderer = component.render();
+  
+  console.log(renderer);
+  base = _render( renderer );
+  component.base = base;
+}
+
+const render = (vnode, container) => {
+  return container.appendChild(_render(vnode));
+}
 
 export default render;
