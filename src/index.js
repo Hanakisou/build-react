@@ -1,5 +1,7 @@
 import React from './React';
 import ReactDOM from './ReactDOM';
+// import React from 'preact';
+// import ReactDOM from 'preact';
 
 // 渲染dom节点
 // const element = (
@@ -48,7 +50,8 @@ class Counter extends React.Component {
   constructor( props ) {
       super( props );
       this.state = {
-          num: 0
+          num: 0,
+          arr: []
       }
   }
 
@@ -61,15 +64,30 @@ class Counter extends React.Component {
   }
 
   onClick() {
-      this.setState( { num: this.state.num + 1 } );
+      const { num, arr } = this.state;
+      arr.push(num + 1);
+      this.setState( {
+        num: num + 1,
+        arr
+      });
+  }
+
+  list() {
+    const { arr } = this.state;
+    return arr.map((v, i) => (
+      <div key={i}>{v}</div>
+    ))
   }
 
   render() {
+      const { num } = this.state;
       return (
-          <div onClick={ () => this.onClick() }>
-              <h1>number: {this.state.num}</h1>
-              <button>add</button>
-          </div>
+        <div onClick={ () => this.onClick() }>
+            <h1 key={1}>number: {num}</h1>
+            <button>add</button>
+            {/* {num % 2 ? <p>11</p> : null} */}
+            {this.list()}
+        </div>
       );
   }
 }
