@@ -1,13 +1,13 @@
-import { renderComponent } from '../ReactDOM/diff';
+import { enqueueSetState } from './setStateQueue';
 class Component {
   constructor(props = {}) {
     this.state = {};
     this.props = props;
   }
 
-  setState(newState) {
-    Object.assign(this.state, newState);
-    renderComponent(this)
+  setState(stateChange) {
+    // Object.assign(this.state, newState);
+    enqueueSetState(stateChange, this);
   }
 }
 
